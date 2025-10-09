@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <cstdlib>
 
 using namespace std;
 
@@ -28,7 +29,7 @@ void add_student(vector<vector<string>> &students_table)
             cout << "Grade " << (i + 1) << ": ";
             getline(cin, grade);
 
-            bool valid = true;
+            bool valid = (grade.size() > 0);
             for (int j = 0; j < (int)grade.size(); j++)
             {
                 if (!isdigit(grade[j]))
@@ -58,6 +59,7 @@ void add_student(vector<vector<string>> &students_table)
 
     cout << "\nStudent '" << name << "' added successfully!\n";
     cout << "=========================================\n";
+    cin.get();
 }
 
 void print_table_of_students(const vector<vector<string>> &students_table)
@@ -65,6 +67,7 @@ void print_table_of_students(const vector<vector<string>> &students_table)
     if (students_table.empty())
     {
         cout << "\nNo students added yet!\n";
+        cin.get();
         return;
     }
 
@@ -91,6 +94,7 @@ void print_table_of_students(const vector<vector<string>> &students_table)
     }
 
     cout << "===============================================================================================================\n";
+    cin.get();
 }
 
 void print_students_by_category(const vector<vector<string>> &students_table)
@@ -98,6 +102,7 @@ void print_students_by_category(const vector<vector<string>> &students_table)
     if (students_table.empty())
     {
         cout << "\nNo students added yet!\n";
+        cin.get();
         return;
     }
 
@@ -123,6 +128,7 @@ void print_students_by_category(const vector<vector<string>> &students_table)
     }
 
     cout << "=============================================\n";
+    cin.get();
 }
 
 void print_particular_student_grades(string name, const vector<vector<string>> &students_table)
@@ -162,11 +168,13 @@ void print_particular_student_grades(string name, const vector<vector<string>> &
                 cout << "Excellent student";
 
             cout << "\n=============================================\n";
+            cin.get();
             return;
         }
     }
 
     cout << "\n   Student not found!\n";
+    cin.get();
 }
 
 
@@ -177,6 +185,7 @@ int main()
 
     while (true)
     {
+        system("cls");
         cout << "\n=========== MENU ===========\n";
         cout << "1 - Add student\n";
         cout << "2 - Show table of averages\n";
