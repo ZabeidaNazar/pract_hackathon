@@ -3,14 +3,26 @@
 
 using namespace std;
 
-void add_student()
+void add_student(std::vector<vector<string>> &students_table)
 {
     string student_name;
+    vector<string> student_info;
 
     cout << "Enter student name: ";
     cin >> student_name;
+    
+    student_info.push_back(student_name);
 
-    cout << student_name;
+    for (int i = 0; i < 3; i++)
+    {
+        string student_grade;
+        cout << "Enter student grade: ";
+        cin >> student_grade;
+        student_info.push_back(student_grade);
+    }
+
+    students_table.push_back(student_info);
+
 }
 
 void print_table_of_students()
@@ -35,8 +47,20 @@ void print_particular_student_grades()
 
 int main()
 {
-    std::vector<std::string> students_table;
+    vector<vector<string>> students_table;
 
+    cout << "Select operation:" << endl;
+    cout << "1. Add student" << endl;
+
+    add_student(students_table);
+    
+    for (int i = 0; i < students_table.size(); i++)
+    {
+        for (int j = 0; j < students_table[i].size(); j++)
+        {
+            cout << students_table[i][j] << endl;
+        }
+    }
 
     return 0;
 }
