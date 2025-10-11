@@ -177,6 +177,38 @@ void print_particular_student_grades(string name, const vector<vector<string>> &
     cin.get();
 }
 
+void get_medium_of_group(const vector<vector<string>> &students_table)
+{
+    double total_sum = 0;
+    int grade_count = 0;
+
+    for (const auto& student : students_table)
+    {
+        for (int i = 1; i < student.size(); i++) 
+        {
+            int grade = stoi(student[i]); 
+            total_sum += grade;
+            grade_count++;
+        }
+    }
+
+    cout << "\n=============================================\n";
+    cout << "           Group Average Grade\n";
+    cout << "=============================================\n";
+
+    if (grade_count > 0)
+    {
+        double average = total_sum / grade_count;
+        cout << "Group Average: " << average << "\n";
+    }
+    else
+    {
+        cout << "No grades available to calculate average.\n";
+    }
+
+    cout << "=============================================\n";
+    cin.get();
+}
 
 int main()
 {
@@ -191,6 +223,7 @@ int main()
         cout << "2 - Show table of averages\n";
         cout << "3 - Show students by category\n";
         cout << "4 - Show grades of a student\n";
+        cout << "5 - Show group average\n";
         cout << "0 - Exit\n";
         cout << "============================\n";
         cout << "Choose: ";
@@ -214,6 +247,9 @@ int main()
             cout << "Enter student name: ";
             getline(cin, name);
             print_particular_student_grades(name, students_table);
+        }
+        else if (choice == "5") {
+            get_medium_of_group(students_table);
         }
         else if (choice == "0")
         {
