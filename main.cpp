@@ -305,6 +305,99 @@ void show_category_menu()
     }
 }
 
+void change_student_grade() {
+    if (students_list.empty())
+    {
+        cout << "\nStudent list is currently empty! Cannot change grade.\n";
+        return;
+    }
+
+    cout << "\n=========================================\n";
+    cout << "          Change Student Grade\n";
+    cout << "=========================================\n";
+
+    Student student;
+    string user_input;
+    int student_number;
+
+    cin.ignore();
+    bool validInput = 0;
+    while (!validInput) {
+        cout << "Enter student name: ";
+        getline(cin, user_input);
+
+        if (!user_input.length()) {
+            continue;
+        }
+
+        for (int i = 0; i < students_list.size(); i++) {
+            student = students_list[i];
+            if (student.name == user_input) {
+                student_number = i;
+                validInput = true;
+                break;
+            } else {
+                cout << "Student with name '" << user_input << "' not found." << endl;
+            }
+        }
+    }
+    
+
+    cout << endl << student.name << "'s grades:" << endl;
+    for (int i = 0; i < student.grades.size(); i++)
+    {
+        cout << i + 1 << " - " << student.grades[i] << endl;
+    }
+    cout << endl;
+
+    
+    int grade_number;
+    int new_grade;
+
+    while (true) {
+        cout << "Enter number of grade to change: ";
+        cin >> grade_number;
+
+        if (cin.fail()) {
+            cin.clear();
+            getline(cin, user_input);
+            cout << "It must be number, not '" << user_input << "'" << endl;
+            continue;
+        }
+
+        if (grade_number >= 1 && grade_number <= student.grades.size()) {
+            break;
+        } else {
+            cout << "Grade number must be in range 1 - " << student.grades.size() << endl;
+        }
+    }
+
+    while (true) {
+        cout << "Enter new grade: ";
+        cin >> new_grade;
+
+        if (cin.fail()) {
+            cin.clear();
+            getline(cin, user_input);
+            cout << "It must be number, not '" << user_input << "'" << endl;
+            continue;
+        }
+
+        if (new_grade >= 0 && new_grade <= 100) {
+            break;
+        } else {
+            cout << "Grade must be in range 0 - 100" << endl;
+        }
+    }
+    
+    
+    int old_grade = student.grades[grade_number - 1];
+    students_list[student_number].grades[grade_number - 1] = new_grade;
+
+    cout << endl << student.name << "'s grade changed from " << old_grade << " to " << new_grade << endl;
+    cout << "=========================================\n";
+}
+
 int main()
 {
     string choice;
@@ -318,6 +411,7 @@ int main()
         cout << "4 - Show Specific Student Grades\n";
         cout << "5 - Show Group Average Grade\n";
         cout << "6 - Show Best and Worst Student\n";
+        cout << "7 - Change Student Grade\n";
         cout << "0 - Exit\n";
         cout << "============================\n";
         cout << "Select option: ";
@@ -358,6 +452,11 @@ int main()
         else if (choice == "6")
         {
             print_best_and_worst_student();
+            wait_for_user();
+        }
+        else if (choice == "7")
+        {
+            change_student_grade();
             wait_for_user();
         }
         else if (choice == "0")
