@@ -415,7 +415,15 @@ int main()
      \______/   \___/   \______/  \_______/ \_______/|__/  |__/   \___/ |_______/       |_______/ |_______/ 
     )" << endl << endl;
 
-    string choice;
+    void (*actions[])() = {add_student,
+                           print_table_of_students,
+                           show_category_menu,
+                           print_particular_student_grades,
+                           get_average_of_group,
+                           print_best_and_worst_student,
+                           change_student_grade};
+
+    int choice;
 
     while (true)
     {
@@ -437,52 +445,18 @@ int main()
             cin.ignore(10000, '\n');
             continue;
         }
-
-        if (choice == "1")
-        {
-            add_student();
-            wait_for_user();
-        }
-        else if (choice == "2")
-        {
-            print_table_of_students();
-            wait_for_user();
-        }
-        else if (choice == "3")
-        {
-            show_category_menu();
-            wait_for_user();
-        }
-        else if (choice == "4")
-        {
-            print_particular_student_grades();
-            wait_for_user();
-        }
-        else if (choice == "5")
-        {
-            get_average_of_group();
-            wait_for_user();
-        }
-        else if (choice == "6")
-        {
-            print_best_and_worst_student();
-            wait_for_user();
-        }
-        else if (choice == "7")
-        {
-            change_student_grade();
-            wait_for_user();
-        }
-        else if (choice == "0")
-        {
+        
+        if (choice == 0) {
             cout << "Exiting program...\n";
             break;
+        };
+        if (choice > 7 || choice < 1) {
+            cout << "Invalid choice! Try again." << endl;
+        } else {
+            actions[choice - 1]();
+            cout << endl;
         }
-        else
-        {
-            cout << "Invalid choice! Try again.\n";
-            wait_for_user();
-        }
+        wait_for_user();
     }
 
     return 0;
