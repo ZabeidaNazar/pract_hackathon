@@ -92,7 +92,7 @@ void print_table_of_students()
     cout << "Name              | Avg. Gr | G.1 | G.2 | G.3\n";
     cout << "------------------------------------------------\n";
 
-    for (const auto &student : students_list)
+    for (const Student &student : students_list)
     {
         cout << student.name << "\t\t| "
              << calculate_average(student) << "\t | "
@@ -113,7 +113,7 @@ void print_particular_student_grades()
     getline(cin, name);
 
     bool found = false;
-    for (const auto &student : students_list)
+    for (const Student &student : students_list)
     {
         if (student.name == name)
         {
@@ -155,7 +155,7 @@ void get_average_of_group()
     double total_sum = 0;
     int grade_count = 0;
 
-    for (const auto &student : students_list)
+    for (const Student &student : students_list)
     {
         for (int grade : student.grades)
         {
@@ -177,7 +177,7 @@ void print_group_by_range(const string &title, int min_score, int max_score)
 {
     vector<Student> group;
 
-    for (const auto &student : students_list)
+    for (const Student &student : students_list)
     {
         double avg = calculate_average(student);
         if (avg >= min_score && avg <= max_score)
@@ -193,7 +193,7 @@ void print_group_by_range(const string &title, int min_score, int max_score)
     }
     else
     {
-        for (const auto &student : group)
+        for (const Student &student : group)
         {
             cout << student.name << " (Average: " << calculate_average(student) << ")\n";
         }
@@ -232,7 +232,7 @@ void print_best_and_worst_student()
 
     for (size_t i = 1; i < students_list.size(); ++i)
     {
-        const auto &student = students_list[i];
+        const Student &student = students_list[i];
         double current_avg = calculate_average(student);
 
         if (current_avg > max_avg)
@@ -318,10 +318,10 @@ void change_student_grade() {
 
     Student student;
     string user_input;
-    int student_number;
+    int student_number = -1;
 
     cin.ignore();
-    bool validInput = 0;
+    bool validInput = false;
     while (!validInput) {
         cout << "Enter student name: ";
         getline(cin, user_input);
@@ -330,21 +330,25 @@ void change_student_grade() {
             continue;
         }
 
+        bool found_student = false;
         for (int i = 0; i < students_list.size(); i++) {
-            student = students_list[i];
-            if (student.name == user_input) {
+            if (students_list[i].name == user_input) {
+                student = students_list[i];
                 student_number = i;
                 validInput = true;
+                found_student = true;
                 break;
-            } else {
-                cout << "Student with name '" << user_input << "' not found." << endl;
             }
+        }
+        
+        if (!found_student) {
+            cout << "Student with name '" << user_input << "' not found." << endl;
         }
     }
     
 
     cout << endl << student.name << "'s grades:" << endl;
-    for (int i = 0; i < student.grades.size(); i++)
+    for (size_t i = 0; i < student.grades.size(); i++)
     {
         cout << i + 1 << " - " << student.grades[i] << endl;
     }
@@ -391,10 +395,10 @@ void change_student_grade() {
     }
     
     
-    int old_grade = student.grades[grade_number - 1];
+    int old_grade = students_list[student_number].grades[grade_number - 1];
     students_list[student_number].grades[grade_number - 1] = new_grade;
 
-    cout << endl << student.name << "'s grade changed from " << old_grade << " to " << new_grade << endl;
+    cout << endl << students_list[student_number].name << "'s grade changed from " << old_grade << " to " << new_grade << endl;
     cout << "=========================================\n";
 }
 
@@ -435,7 +439,6 @@ int main()
         }
         else if (choice == "3")
         {
-            // Викликаємо нове підменю
             show_category_menu();
             wait_for_user();
         }
