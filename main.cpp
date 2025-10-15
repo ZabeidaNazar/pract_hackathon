@@ -4,6 +4,7 @@
 
 using namespace std;
 
+// Структура для представлення студента
 struct Student
 {
     string name;
@@ -12,6 +13,7 @@ struct Student
 
 vector<Student> students_list;
 
+// Розраховує середній бал студента
 double calculate_average(const Student &student)
 {
     if (student.grades.empty())
@@ -28,6 +30,7 @@ double calculate_average(const Student &student)
     return (double)sum / student.grades.size();
 }
 
+// Очікує на введення від користувача для продовження
 void wait_for_user()
 {
     cout << "\nPress Enter to continue...";
@@ -35,12 +38,13 @@ void wait_for_user()
     cin.get();
 }
 
+// Додає нового студента до списку
 void add_student()
 {
     Student new_student;
 
     cout << "\n=========================================\n";
-    cout << "               Add New Student\n";
+    cout << "                  Add New Student\n";
     cout << "=========================================\n";
 
     cin.ignore();
@@ -80,6 +84,7 @@ void add_student()
     cout << "=========================================\n";
 }
 
+// Виводить таблицю з усіма студентами та їхніми оцінками
 void print_table_of_students()
 {
     if (students_list.empty())
@@ -94,16 +99,22 @@ void print_table_of_students()
 
     for (const Student &student : students_list)
     {
-        cout << student.name << "\t\t| "
-             << calculate_average(student) << "\t | "
-             << student.grades[0] << " | "
-             << student.grades[1] << " | "
-             << student.grades[2] << endl;
+        cout.width(20);
+        cout << left << student.name << " | ";
+        cout.width(7);
+        cout << left << calculate_average(student) << " | ";
+        cout.width(3);
+        cout << left << student.grades[0] << " | ";
+        cout.width(3);
+        cout << left << student.grades[1] << " | ";
+        cout.width(3);
+        cout << left << student.grades[2] << endl;
     }
 
     cout << "================================================\n";
 }
 
+// Виводить детальну інформацію про конкретного студента
 void print_particular_student_grades()
 {
     string name;
@@ -120,12 +131,14 @@ void print_particular_student_grades()
             double avg = calculate_average(student);
             string category;
 
-            if (avg < 51)
-                category = "Unsatisfactory (1-50)";
-            else if (avg <= 80)
-                category = "Good (51-80)";
+            if (avg <= 50)
+                category = "Bad student (1-50)";
+            else if (avg < 70)
+                category = "Normal student (51-69)";
+            else if (avg < 88)
+                category = "Stipend student (70-87)";
             else
-                category = "Excellent (81-100)";
+                category = "Excellent student (88-100)";
 
             cout << "\n--- Student Information ---\n";
             cout << "Name: " << student.name << "\n";
@@ -144,6 +157,7 @@ void print_particular_student_grades()
     }
 }
 
+// Розраховує та виводить середній бал по всій групі
 void get_average_of_group()
 {
     if (students_list.empty())
@@ -173,8 +187,15 @@ void get_average_of_group()
     cout << "=============================================\n";
 }
 
+// Універсальна функція для виводу групи студентів за діапазоном оцінок
 void print_group_by_range(const string &title, int min_score, int max_score)
 {
+    if (students_list.empty())
+    {
+        cout << "\nStudent list is currently empty!\n";
+        return;
+    }
+
     vector<Student> group;
 
     for (const Student &student : students_list)
@@ -202,122 +223,65 @@ void print_group_by_range(const string &title, int min_score, int max_score)
     }
 }
 
-void print_all_categories()
+// --- НОВІ ФУНКЦІЇ ДЛЯ МЕНЮ ---
+// Виводить студентів з низькими балами
+void show_bad_students()
 {
-    if (students_list.empty())
-    {
-        cout << "\nStudent list is currently empty!\n";
-        return;
-    }
-
-    cout << "\n========== RESULTS BY ALL GROUPS ==========\n";
-    print_group_by_range("Unsatisfactory (1-50)", 1, 50);
-    print_group_by_range("Good (51-80)", 51, 80);
-    print_group_by_range("Excellent (81-100)", 81, 100);
+    print_group_by_range("Bad Students (1-50)", 1, 50);
 }
 
-void print_best_student()
+// Виводить студентів, які отримують стипендію
+void show_stipend_students()
 {
-    cout << "\n========== THE BEST STUDENT ==========\n";
+    print_group_by_range("Stipend Students (70-100)", 70, 100);
+}
+
+// Виводить відмінників
+void show_excellent_students()
+{
+    print_group_by_range("Excellent Students (88-100)", 88, 100);
+}
+// -----------------------------
+
+// Виводить найкращого та найгіршого студента
+void print_best_and_worst_student()
+{
+    cout << "\n========== BEST AND WORST STUDENT ==========\n";
     if (students_list.empty())
     {
         cout << "Student list is empty.\n";
         return;
     }
-    const Student *best_student = &students_list[0];
-    double max_avg = calculate_average(*best_student);
+
+    size_t best_student_index = 0;
+    size_t worst_student_index = 0;
+    double max_avg = calculate_average(students_list[0]);
+    double min_avg = calculate_average(students_list[0]);
+
     for (size_t i = 1; i < students_list.size(); ++i)
     {
-        const auto &student = students_list[i];
-        double current_avg = calculate_average(student);
+        double current_avg = calculate_average(students_list[i]);
 
         if (current_avg > max_avg)
         {
             max_avg = current_avg;
-            best_student = &student;
+            best_student_index = i;
         }
-    }
-    cout << "\nBest student:\n";
-    cout << best_student->name << " (Average Grade: " << max_avg << ")\n";
-}
-void print_worst_student()
-{
-    cout << "\n========== THE WORST STUDENT ==========\n";
-    if (students_list.empty())
-    {
-        cout << "Student list is empty.\n";
-        return;
-    }
-
-    const Student *worst_student = &students_list[0];
-    double min_avg = calculate_average(*worst_student);
-
-    for (size_t i = 1; i < students_list.size(); ++i)
-    {
-        const auto &student = students_list[i];
-        double current_avg = calculate_average(student);
-
         if (current_avg < min_avg)
         {
             min_avg = current_avg;
-            worst_student = &student;
+            worst_student_index = i;
         }
     }
 
-    cout << worst_student->name << " (Average Grade: " << min_avg << ")\n";
+    cout << "\nBest student:\n";
+    cout << students_list[best_student_index].name << " (Average Grade: " << max_avg << ")\n";
+
+    cout << "\nWorst student:\n";
+    cout << students_list[worst_student_index].name << " (Average Grade: " << min_avg << ")\n";
 }
 
-void show_category_menu()
-{
-    if (students_list.empty())
-    {
-        cout << "\nStudent list is currently empty! Cannot display categories.\n";
-        return;
-    }
-
-    string category_choice;
-
-    cout << "\n--- Select Category to View ---\n";
-    cout << "1 - Excellent (81-100)\n";
-    cout << "2 - Good (51-80)\n";
-    cout << "3 - Unsatisfactory (1-50)\n";
-    cout << "4 - Show All Categories\n";
-    cout << "0 - Back to Main Menu\n";
-    cout << "Select option: ";
-
-    if (!(cin >> category_choice))
-    {
-        cin.clear();
-        cin.ignore(10000, '\n');
-        return;
-    }
-
-    if (category_choice == "1")
-    {
-        print_group_by_range("Excellent (81-100)", 81, 100);
-    }
-    else if (category_choice == "2")
-    {
-        print_group_by_range("Good (51-80)", 51, 80);
-    }
-    else if (category_choice == "3")
-    {
-        print_group_by_range("Unsatisfactory (1-50)", 1, 50);
-    }
-    else if (category_choice == "4")
-    {
-        print_all_categories();
-    }
-    else if (category_choice == "0")
-    {
-        cout << "Returning to main menu...\n";
-    }
-    else
-    {
-        cout << "Invalid choice!\n";
-    }
-}
-
+// Змінює оцінку обраного студента
 void change_student_grade()
 {
     if (students_list.empty())
@@ -327,40 +291,33 @@ void change_student_grade()
     }
 
     cout << "\n=========================================\n";
-    cout << "          Change Student Grade\n";
+    cout << "              Change Student Grade\n";
     cout << "=========================================\n";
 
-    Student student;
-    string user_input;
-    int student_number;
+    string student_name;
+    int student_index = -1;
 
     cin.ignore();
-    bool validInput = 0;
-    while (!validInput)
+    while (student_index == -1)
     {
         cout << "Enter student name: ";
-        getline(cin, user_input);
-
-        if (!user_input.length())
-        {
-            continue;
-        }
+        getline(cin, student_name);
 
         for (int i = 0; i < students_list.size(); i++)
         {
-            student = students_list[i];
-            if (student.name == user_input)
+            if (students_list[i].name == student_name)
             {
-                student_number = i;
-                validInput = true;
+                student_index = i;
                 break;
             }
-            else
-            {
-                cout << "Student with name '" << user_input << "' not found." << endl;
-            }
+        }
+        if (student_index == -1)
+        {
+            cout << "Student with name '" << student_name << "' not found. Try again.\n";
         }
     }
+
+    const Student &student = students_list[student_index];
 
     cout << endl
          << student.name << "'s grades:" << endl;
@@ -375,55 +332,39 @@ void change_student_grade()
 
     while (true)
     {
-        cout << "Enter number of grade to change: ";
-        cin >> grade_number;
-
-        if (cin.fail())
+        cout << "Enter number of grade to change (1-" << student.grades.size() << "): ";
+        if (!(cin >> grade_number) || grade_number < 1 || grade_number > student.grades.size())
         {
+            cout << "Invalid input. Please enter a number from 1 to " << student.grades.size() << ".\n";
             cin.clear();
-            getline(cin, user_input);
-            cout << "It must be number, not '" << user_input << "'" << endl;
-            continue;
-        }
-
-        if (grade_number >= 1 && grade_number <= student.grades.size())
-        {
-            break;
+            cin.ignore(10000, '\n');
         }
         else
         {
-            cout << "Grade number must be in range 1 - " << student.grades.size() << endl;
+            break;
         }
     }
 
     while (true)
     {
-        cout << "Enter new grade: ";
-        cin >> new_grade;
-
-        if (cin.fail())
+        cout << "Enter new grade (0-100): ";
+        if (!(cin >> new_grade) || new_grade < 0 || new_grade > 100)
         {
+            cout << "Invalid input. Please enter a number from 0 to 100.\n";
             cin.clear();
-            getline(cin, user_input);
-            cout << "It must be number, not '" << user_input << "'" << endl;
-            continue;
-        }
-
-        if (new_grade >= 0 && new_grade <= 100)
-        {
-            break;
+            cin.ignore(10000, '\n');
         }
         else
         {
-            cout << "Grade must be in range 0 - 100" << endl;
+            break;
         }
     }
 
-    int old_grade = student.grades[grade_number - 1];
-    students_list[student_number].grades[grade_number - 1] = new_grade;
+    int old_grade = students_list[student_index].grades[grade_number - 1];
+    students_list[student_index].grades[grade_number - 1] = new_grade;
 
     cout << endl
-         << student.name << "'s grade changed from " << old_grade << " to " << new_grade << endl;
+         << student.name << "'s grade #" << grade_number << " changed from " << old_grade << " to " << new_grade << endl;
     cout << "=========================================\n";
 }
 
@@ -440,15 +381,16 @@ int main()
         cout << endl
              << endl
              << R"(
-         /$$$$$$   /$$                     /$$                       /$$                     /$$$$$$$  /$$$$$$$ 
-        /$$__  $$ | $$                    | $$                      | $$                    | $$__  $$| $$__  $$
-       | $$  \__/ /$$$$$$  /$$   /$$  /$$$$$$$  /$$$$$$  /$$$$$$$  /$$$$$$   /$$$$$$$       | $$  \ $$| $$  \ $$
-       |  $$$$$$ |_  $$_/ | $$  | $$ /$$__  $$ /$$__  $$| $$__  $$|_  $$_/  /$$_____/       | $$  | $$| $$$$$$$ 
-        \____  $$ | $$    | $$  | $$| $$  | $$| $$$$$$$$| $$  \ $$  | $$   |  $$$$$$        | $$  | $$| $$__  $$
-        /$$  \ $$ | $$ /$$| $$  | $$| $$  | $$| $$_____/| $$  | $$  | $$ /$$\____  $$       | $$  | $$| $$  \ $$
-       |  $$$$$$/ |  $$$$/|  $$$$$$/|  $$$$$$$|  $$$$$$$| $$  | $$  |  $$$$//$$$$$$$/       | $$$$$$$/| $$$$$$$/
-        \______/   \___/   \______/  \_______/ \_______/|__/  |__/   \___/ |_______/        |_______/ |_______/ 
-        )" << endl
+          /$$$$$$   /$$                               /$$                                  /$$$$$$$  /$$$$$$$ 
+         /$$__  $$ | $$                              | $$                                 | $$__  $$| $$__  $$
+        | $$  \__/ /$$$$$$   /$$   /$$  /$$$$$$$   /$$$$$$   /$$$$$$$        | $$  \ $$| $$  \ $$
+        |  $$$$$$ |_  $$_/  | $$  | $$ /$$__  $$ /$$__  $$| $$__  $$        | $$  | $$| $$$$$$$ 
+         \____  $$ | $$    | $$  | $$| $$  | $$| $$$$$$$$| $$  \ $$        | $$  | $$| $$__  $$
+         /$$  \ $$ | $$ /$$| $$  | $$| $$  | $$| $$_____/| $$  | $$        | $$  | $$| $$  \ $$
+        |  $$$$$$/ |  $$$$/|  $$$$$$/|  $$$$$$$|  $$$$$$$| $$  | $$        | $$$$$$$/| $$$$$$$/
+         \______/   \___/   \______/  \_______/ \_______/|__/  |__/         \_______/ |_______/ 
+         )"
+             << endl
              << endl;
 
         string choice;
@@ -456,12 +398,13 @@ int main()
         cout << "\n=========== MENU ===========\n";
         cout << "1 - Add Student\n";
         cout << "2 - Show Grades Table\n";
-        cout << "3 - Show Students by Categories\n";
-        cout << "4 - Show Specific Student Grades\n";
-        cout << "5 - Show Group Average Grade\n";
-        cout << "6 - Show the Best Student\n";
-        cout << "7 - Show the Worst Student\n";
-        cout << "8 - Change Student Grade\n";
+        cout << "3 - Show Bad Students (1-50)\n";
+        cout << "4 - Show Stipend Students (70+)\n";
+        cout << "5 - Show Excellent Students (88+)\n";
+        cout << "6 - Show Specific Student Grades\n";
+        cout << "7 - Show Group Average Grade\n";
+        cout << "8 - Show Best and Worst Student\n";
+        cout << "9 - Change Student Grade\n";
         cout << "0 - Exit\n";
         cout << "============================\n";
         cout << "Select option: ";
@@ -485,30 +428,35 @@ int main()
         }
         else if (choice == "3")
         {
-            show_category_menu();
+            show_bad_students();
             wait_for_user();
         }
         else if (choice == "4")
         {
-            print_particular_student_grades();
+            show_stipend_students();
             wait_for_user();
         }
         else if (choice == "5")
         {
-            get_average_of_group();
+            show_excellent_students();
             wait_for_user();
         }
         else if (choice == "6")
         {
-            print_best_student();
+            print_particular_student_grades();
             wait_for_user();
         }
         else if (choice == "7")
         {
-            print_worst_student();
+            get_average_of_group();
             wait_for_user();
         }
         else if (choice == "8")
+        {
+            print_best_and_worst_student();
+            wait_for_user();
+        }
+        else if (choice == "9")
         {
             change_student_grade();
             wait_for_user();
