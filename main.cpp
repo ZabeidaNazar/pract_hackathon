@@ -40,7 +40,7 @@ void add_student()
     Student new_student;
 
     cout << "\n=========================================\n";
-    cout << "                         Add New Student\n";
+    cout << "               Add New Student\n";
     cout << "=========================================\n";
 
     cin.ignore();
@@ -313,15 +313,15 @@ void change_student_grade()
     }
 
     cout << "\n=========================================\n";
-    cout << "            Change Student Grade\n";
+    cout << "          Change Student Grade\n";
     cout << "=========================================\n";
 
     Student student;
     string user_input;
-    int student_number = -1;
+    int student_number;
 
     cin.ignore();
-    bool validInput = false;
+    bool validInput = 0;
     while (!validInput)
     {
         cout << "Enter student name: ";
@@ -332,28 +332,25 @@ void change_student_grade()
             continue;
         }
 
-        bool found_student = false;
         for (int i = 0; i < students_list.size(); i++)
         {
-            if (students_list[i].name == user_input)
+            student = students_list[i];
+            if (student.name == user_input)
             {
-                student = students_list[i];
                 student_number = i;
                 validInput = true;
-                found_student = true;
                 break;
             }
-        }
-
-        if (!found_student)
-        {
-            cout << "Student with name '" << user_input << "' not found." << endl;
+            else
+            {
+                cout << "Student with name '" << user_input << "' not found." << endl;
+            }
         }
     }
 
     cout << endl
          << student.name << "'s grades:" << endl;
-    for (size_t i = 0; i < student.grades.size(); i++)
+    for (int i = 0; i < student.grades.size(); i++)
     {
         cout << i + 1 << " - " << student.grades[i] << endl;
     }
@@ -408,11 +405,11 @@ void change_student_grade()
         }
     }
 
-    int old_grade = students_list[student_number].grades[grade_number - 1];
+    int old_grade = student.grades[grade_number - 1];
     students_list[student_number].grades[grade_number - 1] = new_grade;
 
     cout << endl
-         << students_list[student_number].name << "'s grade changed from " << old_grade << " to " << new_grade << endl;
+         << student.name << "'s grade changed from " << old_grade << " to " << new_grade << endl;
     cout << "=========================================\n";
 }
 
@@ -420,25 +417,25 @@ int main()
 {
     while (true)
     {
-        #ifdef _WIN32
-                system("cls");
-        #else
-                system("clear");
-        #endif
+#ifdef _WIN32
+        system("cls");
+#else
+        system("clear");
+#endif
 
         cout << endl
-        << endl
-        << R"(
-        /$$$$$$  /$$                     /$$                        /$$                     /$$$$$$$  /$$$$$$$ 
-        /$$__  $$| $$                    | $$                       | $$                    | $$__  $$| $$__  $$
-        | $$  \__//$$$$$$   /$$   /$$ /$$$$$$$   /$$$$$$  /$$$$$$$  /$$$$$$   /$$$$$$$       | $$  \ $$| $$  \ $$
-        |  $$$$$$|_  $$_/  | $$  | $$ /$$__  $$ /$$__  $$| $$__  $$|_  $$_/  /$$_____/       | $$  | $$| $$$$$$$ 
+             << endl
+             << R"(
+         /$$$$$$   /$$                     /$$                       /$$                     /$$$$$$$  /$$$$$$$ 
+        /$$__  $$ | $$                    | $$                      | $$                    | $$__  $$| $$__  $$
+       | $$  \__/ /$$$$$$  /$$   /$$  /$$$$$$$  /$$$$$$  /$$$$$$$  /$$$$$$   /$$$$$$$       | $$  \ $$| $$  \ $$
+       |  $$$$$$ |_  $$_/ | $$  | $$ /$$__  $$ /$$__  $$| $$__  $$|_  $$_/  /$$_____/       | $$  | $$| $$$$$$$ 
         \____  $$ | $$    | $$  | $$| $$  | $$| $$$$$$$$| $$  \ $$  | $$   |  $$$$$$        | $$  | $$| $$__  $$
         /$$  \ $$ | $$ /$$| $$  | $$| $$  | $$| $$_____/| $$  | $$  | $$ /$$\____  $$       | $$  | $$| $$  \ $$
-        |  $$$$$$/ |  $$$$/|  $$$$$$/|  $$$$$$$|  $$$$$$$| $$  | $$  |  $$$$//$$$$$$$/       | $$$$$$$/| $$$$$$$/
+       |  $$$$$$/ |  $$$$/|  $$$$$$/|  $$$$$$$|  $$$$$$$| $$  | $$  |  $$$$//$$$$$$$/       | $$$$$$$/| $$$$$$$/
         \______/   \___/   \______/  \_______/ \_______/|__/  |__/   \___/ |_______/        |_______/ |_______/ 
         )" << endl
-            << endl;
+             << endl;
 
         string choice;
 
