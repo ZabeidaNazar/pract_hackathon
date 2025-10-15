@@ -40,7 +40,7 @@ void add_student()
     Student new_student;
 
     cout << "\n=========================================\n";
-    cout << "               Add New Student\n";
+    cout << "             Add New Student\n";
     cout << "=========================================\n";
 
     cin.ignore();
@@ -89,10 +89,10 @@ void print_table_of_students()
     }
 
     cout << "\n================================================\n";
-    cout << "Name                 | Avg. Gr | G.1 | G.2 | G.3\n";
+    cout << "Name              | Avg. Gr | G.1 | G.2 | G.3\n";
     cout << "------------------------------------------------\n";
 
-    for (const Student &student : students_list)
+    for (const auto &student : students_list)
     {
         cout << student.name << "\t\t| "
              << calculate_average(student) << "\t | "
@@ -113,7 +113,7 @@ void print_particular_student_grades()
     getline(cin, name);
 
     bool found = false;
-    for (const Student &student : students_list)
+    for (const auto &student : students_list)
     {
         if (student.name == name)
         {
@@ -155,7 +155,7 @@ void get_average_of_group()
     double total_sum = 0;
     int grade_count = 0;
 
-    for (const Student &student : students_list)
+    for (const auto &student : students_list)
     {
         for (int grade : student.grades)
         {
@@ -167,7 +167,7 @@ void get_average_of_group()
     double group_avg = total_sum / grade_count;
 
     cout << "\n=============================================\n";
-    cout << "                 Group Average Grade\n";
+    cout << "            Group Average Grade\n";
     cout << "=============================================\n";
     cout << "Average Grade: " << group_avg << "\n";
     cout << "=============================================\n";
@@ -177,7 +177,7 @@ void print_group_by_range(const string &title, int min_score, int max_score)
 {
     vector<Student> group;
 
-    for (const Student &student : students_list)
+    for (const auto &student : students_list)
     {
         double avg = calculate_average(student);
         if (avg >= min_score && avg <= max_score)
@@ -193,7 +193,7 @@ void print_group_by_range(const string &title, int min_score, int max_score)
     }
     else
     {
-        for (const Student &student : group)
+        for (const auto &student : group)
         {
             cout << student.name << " (Average: " << calculate_average(student) << ")\n";
         }
@@ -215,42 +215,55 @@ void print_all_categories()
     print_group_by_range("Good (51-80)", 51, 80);
     print_group_by_range("Excellent (81-100)", 81, 100);
 }
-
-void print_best_and_worst_student()
+void print_best_student()
 {
-    cout << "\n========== BEST AND WORST STUDENT ==========\n";
+    cout << "\n========== THE BEST STUDENT ==========\n";
+    if (students_list.empty())
+    {
+        cout << "Student list is empty.\n";
+        return;
+    }
+    const Student *best_student = &students_list[0];
+    double max_avg = calculate_average(*best_student);
+    for (size_t i = 1; i < students_list.size(); ++i)
+    {
+        const auto &student = students_list[i];
+        double current_avg = calculate_average(student);
+
+        if (current_avg > max_avg)
+        {
+            max_avg = current_avg;
+            best_student = &student;
+        }
+    }
+    cout << "\nBest student:\n";
+    cout << best_student->name << " (Average Grade: " << max_avg << ")\n";
+}
+void print_worst_student()
+{
+    cout << "\n========== THE WORST STUDENT ==========\n";
     if (students_list.empty())
     {
         cout << "Student list is empty.\n";
         return;
     }
 
-    size_t best_student_index = 0;
-    size_t worst_student_index = 0;
-    double max_avg = calculate_average(students_list[0]);
-    double min_avg = calculate_average(students_list[0]);
+    const Student *worst_student = &students_list[0];
+    double min_avg = calculate_average(*worst_student);
 
     for (size_t i = 1; i < students_list.size(); ++i)
     {
-        double current_avg = calculate_average(students_list[i]);
+        const auto &student = students_list[i];
+        double current_avg = calculate_average(student);
 
-        if (current_avg > max_avg)
-        {
-            max_avg = current_avg;
-            best_student_index = i;
-        }
         if (current_avg < min_avg)
         {
             min_avg = current_avg;
-            worst_student_index = i;
+            worst_student = &student;
         }
     }
 
-    cout << "\nBest student:\n";
-    cout << students_list[best_student_index].name << " (Average Grade: " << max_avg << ")\n";
-
-    cout << "\nWorst student:\n";
-    cout << students_list[worst_student_index].name << " (Average Grade: " << min_avg << ")\n";
+    cout << worst_student->name << " (Average Grade: " << min_avg << ")\n";
 }
 
 void show_category_menu()
@@ -415,38 +428,19 @@ void change_student_grade()
 
 int main()
 {
+    string choice;
+
     while (true)
     {
-#ifdef _WIN32
-        system("cls");
-#else
-        system("clear");
-#endif
-
-        cout << endl
-             << endl
-             << R"(
-         /$$$$$$   /$$                     /$$                       /$$                     /$$$$$$$  /$$$$$$$ 
-        /$$__  $$ | $$                    | $$                      | $$                    | $$__  $$| $$__  $$
-       | $$  \__/ /$$$$$$  /$$   /$$  /$$$$$$$  /$$$$$$  /$$$$$$$  /$$$$$$   /$$$$$$$       | $$  \ $$| $$  \ $$
-       |  $$$$$$ |_  $$_/ | $$  | $$ /$$__  $$ /$$__  $$| $$__  $$|_  $$_/  /$$_____/       | $$  | $$| $$$$$$$ 
-        \____  $$ | $$    | $$  | $$| $$  | $$| $$$$$$$$| $$  \ $$  | $$   |  $$$$$$        | $$  | $$| $$__  $$
-        /$$  \ $$ | $$ /$$| $$  | $$| $$  | $$| $$_____/| $$  | $$  | $$ /$$\____  $$       | $$  | $$| $$  \ $$
-       |  $$$$$$/ |  $$$$/|  $$$$$$/|  $$$$$$$|  $$$$$$$| $$  | $$  |  $$$$//$$$$$$$/       | $$$$$$$/| $$$$$$$/
-        \______/   \___/   \______/  \_______/ \_______/|__/  |__/   \___/ |_______/        |_______/ |_______/ 
-        )" << endl
-             << endl;
-
-        string choice;
-
         cout << "\n=========== MENU ===========\n";
         cout << "1 - Add Student\n";
         cout << "2 - Show Grades Table\n";
         cout << "3 - Show Students by Categories\n";
         cout << "4 - Show Specific Student Grades\n";
         cout << "5 - Show Group Average Grade\n";
-        cout << "6 - Show Best and Worst Student\n";
-        cout << "7 - Change Student Grade\n";
+        cout << "6 - Show the Best Student\n";
+        cout << "7 - Show the Worst Student\n";
+        cout << "8 - Change Student Grade\n";
         cout << "0 - Exit\n";
         cout << "============================\n";
         cout << "Select option: ";
@@ -470,6 +464,7 @@ int main()
         }
         else if (choice == "3")
         {
+            // Викликаємо нове підменю
             show_category_menu();
             wait_for_user();
         }
@@ -485,10 +480,15 @@ int main()
         }
         else if (choice == "6")
         {
-            print_best_and_worst_student();
+            print_best_student();
             wait_for_user();
         }
         else if (choice == "7")
+        {
+            print_worst_student();
+            wait_for_user();
+        }
+        else if (choice == "8")
         {
             change_student_grade();
             wait_for_user();
