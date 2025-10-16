@@ -91,7 +91,7 @@ void print_table_of_students()
 
 
     cout << "\n===============================================================================================================\n";
-    cout << "Name" << string(16, ' ') << "| Average Grade      | Grade 1            | Grade 2            | Grade 3            \n";
+    cout << "Name" << string(16, ' ') << "| Average Grade     | Grade 1             | Grade 2             | Grade 3            \n";
     cout << "\n---------------------------------------------------------------------------------------------------------------\n";
 
     for (const Student &student : students_list)
@@ -356,6 +356,7 @@ void change_student_grade()
     Student student;
     string user_input;
     int student_number;
+    bool is_find = false;
 
     cin.ignore();
     bool validInput = 0;
@@ -376,12 +377,12 @@ void change_student_grade()
             {
                 student_number = i;
                 validInput = true;
+                is_find = true;
                 break;
             }
-            else
-            {
-                cout << "Student with name '" << user_input << "' not found." << endl;
-            }
+        }
+        if (!is_find) {
+            cout << "Student with name '" << user_input << "' not found." << endl;
         }
     }
 
