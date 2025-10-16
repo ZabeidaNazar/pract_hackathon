@@ -1,4 +1,4 @@
-<img width="1534" height="801" alt="Screenshot 2025-10-15 084901" src="https://github.com/user-attachments/assets/5c007e71-c968-44ed-9305-137c82e5f5f8" />
+<img width="1569" height="843" alt="Screenshot 2025-10-16 093831" src="https://github.com/user-attachments/assets/0a3fce3c-0214-44a0-8606-b9fc54128f85" />
 
 # 🎓 Student Grade Manager
 
