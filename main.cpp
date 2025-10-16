@@ -88,20 +88,25 @@ void print_table_of_students()
         return;
     }
 
-    cout << "\n================================================\n";
-    cout << "Name                 | Avg. Gr | G.1 | G.2 | G.3\n";
-    cout << "------------------------------------------------\n";
+
+    cout << "\n===============================================================================================================\n";
+    cout << "Name" << string(16, ' ') << "| Average Grade      | Grade 1            | Grade 2            | Grade 3            \n";
+    cout << "\n---------------------------------------------------------------------------------------------------------------\n";
 
     for (const Student &student : students_list)
     {
-        cout << student.name << "\t\t| "
-             << calculate_average(student) << "\t | "
-             << student.grades[0] << " | "
-             << student.grades[1] << " | "
-             << student.grades[2] << endl;
+        float avg = calculate_average(student);
+        string avg_str = to_string(avg);
+
+        cout << student.name << string(20 - student.name.size(), ' ') 
+             << "| " << fixed << setprecision(2) << avg << string(22 - avg_str.size(), ' ') 
+             << "| " << fixed << setprecision(2) << student.grades[0] << string(20 - to_string(student.grades[0]).size(), ' ') 
+             << "| " << fixed << setprecision(2) << student.grades[1] << string(20 - to_string(student.grades[1]).size(), ' ') 
+             << "| " << fixed << setprecision(2) << string(20 - to_string(student.grades[2]).size(), ' ') 
+             << endl;
     }
 
-    cout << "================================================\n";
+    cout << "===============================================================================================================\n";
 }
 
 void print_particular_student_grades()
