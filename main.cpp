@@ -103,7 +103,7 @@ void print_table_of_students()
              << "| " << fixed << setprecision(2) << avg << string(22 - avg_str.size(), ' ') 
              << "| " << fixed << setprecision(2) << student.grades[0] << string(20 - to_string(student.grades[0]).size(), ' ') 
              << "| " << fixed << setprecision(2) << student.grades[1] << string(20 - to_string(student.grades[1]).size(), ' ') 
-             << "| " << fixed << setprecision(2) << string(20 - to_string(student.grades[2]).size(), ' ') 
+             << "| " << fixed << setprecision(2) << student.grades[2] << string(20 - to_string(student.grades[2]).size(), ' ') 
              << endl;
     }
 
