@@ -202,18 +202,35 @@ void print_group_by_range(const string &title, int min_score, int max_score)
     }
 }
 
-void print_all_categories()
-{
-    if (students_list.empty())
-    {
-        cout << "\nStudent list is currently empty!\n";
-        return;
-    }
+// void print_all_categories()
+// {
+//     if (students_list.empty())
+//     {
+//         cout << "\nStudent list is currently empty!\n";
+//         return;
+//     }
 
-    cout << "\n========== RESULTS BY ALL GROUPS ==========\n";
-    print_group_by_range("Unsatisfactory (1-50)", 1, 50);
-    print_group_by_range("Good (51-80)", 51, 80);
-    print_group_by_range("Excellent (81-100)", 81, 100);
+//     cout << "\n========== RESULTS BY ALL GROUPS ==========\n";
+//     print_group_by_range("Unsatisfactory (1-50)", 1, 50);
+//     print_group_by_range("Good (51-80)", 51, 80);
+//     print_group_by_range("Excellent (81-100)", 81, 100);
+// }
+
+void show_bad_students()
+{
+    print_group_by_range("Bad Students (1-50)", 1, 50);
+}
+
+// Виводить студентів, які отримують стипендію
+void show_stipend_students()
+{
+    print_group_by_range("Stipend Students (70-100)", 70, 100);
+}
+
+// Виводить відмінників
+void show_excellent_students()
+{
+    print_group_by_range("Excellent Students (88-100)", 88, 100);
 }
 
 void print_best_student()
@@ -267,56 +284,56 @@ void print_worst_student()
     cout << worst_student->name << " (Average Grade: " << min_avg << ")\n";
 }
 
-void show_category_menu()
-{
-    if (students_list.empty())
-    {
-        cout << "\nStudent list is currently empty! Cannot display categories.\n";
-        return;
-    }
+// void show_category_menu()
+// {
+//     if (students_list.empty())
+//     {
+//         cout << "\nStudent list is currently empty! Cannot display categories.\n";
+//         return;
+//     }
 
-    string category_choice;
+//     string category_choice;
 
-    cout << "\n--- Select Category to View ---\n";
-    cout << "1 - Excellent (81-100)\n";
-    cout << "2 - Good (51-80)\n";
-    cout << "3 - Unsatisfactory (1-50)\n";
-    cout << "4 - Show All Categories\n";
-    cout << "0 - Back to Main Menu\n";
-    cout << "Select option: ";
+//     cout << "\n--- Select Category to View ---\n";
+//     cout << "1 - Excellent (81-100)\n";
+//     cout << "2 - Good (51-80)\n";
+//     cout << "3 - Unsatisfactory (1-50)\n";
+//     cout << "4 - Show All Categories\n";
+//     cout << "0 - Back to Main Menu\n";
+//     cout << "Select option: ";
 
-    if (!(cin >> category_choice))
-    {
-        cin.clear();
-        cin.ignore(10000, '\n');
-        return;
-    }
+//     if (!(cin >> category_choice))
+//     {
+//         cin.clear();
+//         cin.ignore(10000, '\n');
+//         return;
+//     }
 
-    if (category_choice == "1")
-    {
-        print_group_by_range("Excellent (81-100)", 81, 100);
-    }
-    else if (category_choice == "2")
-    {
-        print_group_by_range("Good (51-80)", 51, 80);
-    }
-    else if (category_choice == "3")
-    {
-        print_group_by_range("Unsatisfactory (1-50)", 1, 50);
-    }
-    else if (category_choice == "4")
-    {
-        print_all_categories();
-    }
-    else if (category_choice == "0")
-    {
-        cout << "Returning to main menu...\n";
-    }
-    else
-    {
-        cout << "Invalid choice!\n";
-    }
-}
+//     if (category_choice == "1")
+//     {
+//         print_group_by_range("Excellent (81-100)", 81, 100);
+//     }
+//     else if (category_choice == "2")
+//     {
+//         print_group_by_range("Good (51-80)", 51, 80);
+//     }
+//     else if (category_choice == "3")
+//     {
+//         print_group_by_range("Unsatisfactory (1-50)", 1, 50);
+//     }
+//     else if (category_choice == "4")
+//     {
+//         print_all_categories();
+//     }
+//     else if (category_choice == "0")
+//     {
+//         cout << "Returning to main menu...\n";
+//     }
+//     else
+//     {
+//         cout << "Invalid choice!\n";
+//     }
+// }
 
 void change_student_grade()
 {
@@ -455,13 +472,15 @@ int main()
 
         cout << "\n=========== MENU ===========\n";
         cout << "1 - Add Student\n";
-        cout << "2 - Show Grades Table\n";
-        cout << "3 - Show Students by Categories\n";
-        cout << "4 - Show Specific Student Grades\n";
-        cout << "5 - Show Group Average Grade\n";
-        cout << "6 - Show the Best Student\n";
-        cout << "7 - Show the Worst Student\n";
-        cout << "8 - Change Student Grade\n";
+        cout << "2 - Show Specific Student Grades\n";
+        cout << "3 - Change Student Grades\n";
+        cout << "4 - Show All Students Grades\n";
+        cout << "5 - Show Excellent Students\n";
+        cout << "6 - Show Stipend Students\n";
+        cout << "7 - Show Unsatisfactory Students\n";
+        cout << "8 - Show Group Average Grade\n";
+        cout << "9 - Show Best Student\n";
+        cout << "10 - Show Worst Student\n";
         cout << "0 - Exit\n";
         cout << "============================\n";
         cout << "Select option: ";
@@ -478,41 +497,53 @@ int main()
             add_student();
             wait_for_user();
         }
+
         else if (choice == "2")
-        {
-            print_table_of_students();
-            wait_for_user();
-        }
-        else if (choice == "3")
-        {
-            show_category_menu();
-            wait_for_user();
-        }
-        else if (choice == "4")
         {
             print_particular_student_grades();
             wait_for_user();
         }
-        else if (choice == "5")
-        {
-            get_average_of_group();
-            wait_for_user();
-        }
-        else if (choice == "6")
-        {
-            print_best_student();
-            wait_for_user();
-        }
-        else if (choice == "7")
-        {
-            print_worst_student();
-            wait_for_user();
-        }
-        else if (choice == "8")
+        else if (choice == "3")
         {
             change_student_grade();
             wait_for_user();
         }
+        else if (choice == "4")
+        {
+            print_table_of_students();
+            wait_for_user();
+        }
+        else if (choice == "5")
+        {
+            show_excellent_students();
+            wait_for_user();
+        }
+        else if (choice == "6")
+        {
+            show_stipend_students();
+            wait_for_user();
+        }
+        else if (choice == "7")
+        {
+            show_bad_students();
+            wait_for_user();
+        }
+        else if (choice == "8")
+        {
+            get_average_of_group();
+            wait_for_user();
+        }
+        else if (choice == "9")
+        {
+            print_best_student();
+            wait_for_user();
+        }
+        else if (choice == "10")
+        {
+            print_worst_student();
+            wait_for_user();
+        }
+
         else if (choice == "0")
         {
             cout << "Exiting program...\n";
